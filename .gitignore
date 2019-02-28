@@ -1,0 +1,13 @@
+a.out
+unit_test
+vgcore.*
+*~
+*.gcda
+*.gcno
+*.o
+#*#
+.#*
+docs/
+koak
+.stack-work/
+koak.cabal
