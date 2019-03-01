@@ -21,6 +21,7 @@ getToken str tokens =
   then (head tokens)
   else (getToken str (tail tokens))
 
+getIdentifier [] = []
 getIdentifier str =
   if (elem (head str) (['A'..'Z'] ++ ['a'..'z'] ++ ['0'..'9'] ++ "."))
   then (head str) : (getIdentifier (tail str))
