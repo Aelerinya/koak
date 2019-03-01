@@ -1,4 +1,4 @@
-module LexicalAnalyser (lexicalAnalyser) where
+module ParseTokens (parseTokens) where
 
 instructions = ["def","for","while"]
 binop = ["==","!=","=","+","*","-","/","<",">"]
@@ -6,8 +6,6 @@ unop = ["!","-"]
 blockDelimiters = [":","(",")",";"]
 types = ["int","double","void"]
 allTokens = binop ++ unop ++ blockDelimiters
-
-lexicalAnalyser file = separateTokens file
 
 removeBlanks str = dropWhile (`elem` " \t\n") str
 
@@ -28,7 +26,7 @@ getIdentifier str =
   then (head str) : (getIdentifier (tail str))
   else []
 
-separateTokens [] = []
-separateTokens file =
+parseTokens [] = []
+parseTokens file =
   let token = (getToken file allTokens) in
-    token : (separateTokens (removeBlanks (drop (length token) file)))
+    token : (parseTokens (removeBlanks (drop (length token) file)))

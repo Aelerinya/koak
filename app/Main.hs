@@ -1,10 +1,10 @@
 module Main where
 
 import System.Environment
-import LexicalAnalyser
+import ParseTokens
 
 --main :: IO ()
 main = do
   args <- getArgs
   file <- readFile (args !! 0)
-  putStrLn (show (lexicalAnalyser file))
+  putStrLn (show (parseTokens file))
