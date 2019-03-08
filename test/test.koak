@@ -2,3 +2,5 @@ def  test(x : double):double x - 1.0;
 y = 2.0;
 while y < 10 do y = y * 2;
 test(y + 3.0);
+a = test(a + !-b, .06) - 5 < 37 != 3;
+if a < b then i + 1 else say(hello);
