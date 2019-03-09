@@ -146,7 +146,7 @@ typeBinop :: Tree -> [(String, [String])] -> (TypedTree, [(String, [String])])
 typeBinop expr symbols =
   let (Node op [arg1,arg2]) = expr;
       (node1, newSymbols1) = (if (op == "=")
-                             then typePrimary arg1 symbols
+                             then (TypedNode "" "" [],symbols)
                              else typeExpression arg1 symbols);
       (TypedNode type1 _ _) = node1;
       (node2, newSymbols2) = typeExpression arg2 newSymbols1;
@@ -213,7 +213,7 @@ typePrimary expr symbols =
           | (isIdentifier primary) =
               let maybeIdType = (lookup primary symbols) in
                 if (maybeIdType == Nothing)
-                then (TypedNode "TypeVar" primary [], symbols)
+                then errorWithoutStackTrace ("Undefined symbol: " ++ primary)
                 else let (Just (idType:prototype)) = maybeIdType in
                   if (null prototype)
                   then (TypedNode idType primary [], symbols)
