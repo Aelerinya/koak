@@ -78,12 +78,6 @@ getPrototypeType tokens =
   then (Node "type" [Node (tokens !! 1) []], (drop 2 tokens))
   else errorWithoutStackTrace ("Missing type declaration at end of def: " ++ (show tokens))
 
--- verifyToken :: [String] -> String -> Bool
--- verifyToken tokensList token =
---   if (null tokenList || (head tokenList) /= token)
---   then errorWithoutStackTrace "Missing '" ++ token ++ "' before " ++ tokenList
---   else (head tokenList)
-
 separateExpressions :: [String] -> [Tree]
 separateExpressions tokens
   | (head tokens) == "for" = getFor tokens
@@ -91,13 +85,14 @@ separateExpressions tokens
   | (head tokens) == "while" = getWhile tokens
   | otherwise = getExpression tokens
 
+-- TODO : improve next keyword search, in case of imbricated control structures
 getWhile :: [String] -> [Tree]
 getWhile tokens =
   let (condition,rest) = break (== "do") (tail tokens) in
     if (null condition || (length rest) < 2 || (head rest) /= "do")
     then errorWithoutStackTrace ("Syntax error in while .. do .. : " ++ (show tokens))
-    else [Node "while" [Node "expr" (parseExpression condition)],
-          Node "do" [Node "expressions" (separateExpressions (tail rest))]]
+    else [Node "while" [Node "condition" [Node "expr" (parseExpression condition)],
+          Node "expressions" (separateExpressions (tail rest))]]
 
 getFor :: [String] -> [Tree]
 getFor tokens =
@@ -140,7 +135,9 @@ getIf tokens =
          [Node "expr" (parseExpression condition)]) :
         (Node "then"
          [Node "expressions" (separateExpressions then_expressions)]) :
-        if (not (null r2)) then [Node "else" (separateExpressions (tail r2))] else [])]
+        if (not (null r2))
+        then [Node "else" [Node "expressions" (separateExpressions (tail r2))]]
+        else [])]
 
 getExpression :: [String] -> [Tree]
 getExpression tokens =

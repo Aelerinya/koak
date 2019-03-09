@@ -1,4 +1,4 @@
-module ParseExpression where
+module ParseExpression (parseExpression) where
 
 import TreeData
 import Identifier
@@ -75,7 +75,7 @@ getPostfix tokens =
     if ((null rest) || (head rest) /= "(")
     then (primary, rest)
     else let (callExpressions,rest2) = getCallExpressions (tail rest) in
-      (Node "call" [Node "primary" [primary], Node "call_expr" callExpressions], rest2)
+      (Node "!call" [Node "primary" [primary], Node "call_expr" callExpressions], rest2)
 
 getCallExpressions :: [String] -> ([Tree], [String])
 getCallExpressions tokens =

@@ -4,6 +4,8 @@ import System.Environment
 import ParseTokens
 import BuildSyntaxTree
 import TreeData
+import TypedTreeData
+import InferTypes
 
 displayTree :: [Char] -> Tree -> IO ()
 displayTree spacing tree =
@@ -14,6 +16,14 @@ displayTree spacing tree =
     putStrLn (spacing ++ str ++ (if (null branches ) then "" else ":"))
     mapM_ (displayTree (spacing ++ "  ")) branches
 
+displayTypedTree :: [Char] -> TypedTree -> IO ()
+displayTypedTree spacing tree = do
+  let (TypedNode nodeType value branches) = tree
+  putStrLn (spacing ++
+            (if (nodeType /= "none") then "type:" ++ nodeType ++ " value:" else "")
+            ++ value ++ (if (null branches) then "" else ":"))
+  mapM_ (displayTypedTree (spacing ++ "  ")) branches
+
 main :: IO ()
 main = do
   args <- getArgs
@@ -23,3 +33,5 @@ main = do
   let tree = buildSyntaxTree tokens
   --putStrLn (show tree)
   displayTree "" tree
+  let typedTree = inferTypes tree
+  displayTypedTree "" typedTree
