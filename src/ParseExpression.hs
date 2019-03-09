@@ -74,7 +74,9 @@ getPostfix tokens =
   let (primary,rest) = getPrimary tokens in
     if ((null rest) || (head rest) /= "(")
     then (primary, rest)
-    else let (callExpressions,rest2) = getCallExpressions (tail rest) in
+    else let (callExpressions,rest2) = if ((rest !! 1) == ")")
+                                       then ([], (drop 2 rest))
+                                       else getCallExpressions (tail rest) in
       (Node "!call" [Node "primary" [primary], Node "call_expr" callExpressions], rest2)
 
 getCallExpressions :: [String] -> ([Tree], [String])

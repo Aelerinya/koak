@@ -85,7 +85,7 @@ separateExpressions tokens
   | (head tokens) == "while" = getWhile tokens
   | otherwise = getExpression tokens
 
--- TODO : improve next keyword search, in case of imbricated control structures
+-- TODO : improve next keyword search, in case of imbricated control statements
 getWhile :: [String] -> [Tree]
 getWhile tokens =
   let (condition,rest) = break (== "do") (tail tokens) in
