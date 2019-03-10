@@ -6,6 +6,7 @@ import BuildSyntaxTree
 import TreeData
 import TypedTreeData
 import InferTypes
+import LlvmIrGenerator
 
 displayTree :: [Char] -> Tree -> IO ()
 displayTree spacing tree =
@@ -29,9 +30,12 @@ main = do
   args <- getArgs
   file <- readFile (args !! 0)
   let tokens = parseTokens file
-  putStrLn (show tokens)
+  --putStrLn (show tokens)
   let tree = buildSyntaxTree tokens
   --putStrLn (show tree)
-  displayTree "" tree
+  --displayTree "" tree
   let typedTree = inferTypes tree
   displayTypedTree "" typedTree
+  let llvmIr = generateLlvmIr typedTree
+  putStrLn llvmIr
+  writeFile "out.ll" llvmIr

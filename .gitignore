@@ -11,3 +11,4 @@ docs/
 koak
 .stack-work/
 koak.cabal
+out.ll

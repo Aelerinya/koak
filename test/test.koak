@@ -1,7 +1,0 @@
-def  test(x : double):double x - 1.0;
-y = 2.0 + test(a);
-while y < 10 do y = y * 2;
-test(y + 3.0);
-a = test(a + !-b) - 5 < 37 != 3;
-if 3 < 2 then a + i + 1 else test(hello);
-for i = 0, i < 4, i = i + 1 in a = a + i;
