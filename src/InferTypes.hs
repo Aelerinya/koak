@@ -141,6 +141,7 @@ typeExpression expr symbols =
                    then typeUnop expr symbols
                    else typePrimary expr symbols
 
+comparison = ["<",">","==","!="]
 typeBinop :: Tree -> [(String, [String])] -> (TypedTree, [(String, [String])])
 --typeBinop expr symbols | trace ("binop: " ++ show symbols ++ show expr) False = undefined
 typeBinop expr symbols =
@@ -151,20 +152,23 @@ typeBinop expr symbols =
       (TypedNode type1 _ _) = node1;
       (node2, newSymbols2) = typeExpression arg2 newSymbols1;
       (TypedNode type2 _ _) = node2;
-      newType = (getTypePriority type1 type2)
+      newType = if (elem op comparison)
+                then "int" else(getTypePriority type1 type2)
   in if (op == "=")
      then let (Node id _) = arg1;
-              updatedSymbols = replaceSymbol id [type2] newSymbols2
-          in (TypedNode type2 op [TypedNode type2 id [],node2], updatedSymbols)
+              (updatedSymbols,status) = replaceSymbol id [type2] newSymbols2
+          in (TypedNode type2 op
+              [TypedNode type2 id [TypedNode "none" status []],node2], updatedSymbols)
      else (TypedNode newType op [node1,node2], newSymbols2)
 
-replaceSymbol :: String -> [String] -> [(String, [String])] -> [(String, [String])]
-replaceSymbol key keyType [] = [(key,keyType)]
+replaceSymbol :: String -> [String] -> [(String, [String])] -> ([(String, [String])],String)
+replaceSymbol key keyType [] = ([(key,keyType)],"first")
 replaceSymbol key keyType symbols =
   let (k,kt) = (head symbols) in
     if (key == k)
-    then (key,keyType):(tail symbols)
-    else (head symbols): replaceSymbol key keyType (tail symbols)
+    then ((key,keyType):(tail symbols),"not first")
+    else let (nextSymbols,status) = replaceSymbol key keyType (tail symbols)
+         in ((head symbols):nextSymbols,status)
 
 getTypePriority :: String -> String -> String
 getTypePriority t1 t2
