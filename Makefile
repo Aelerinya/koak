@@ -10,7 +10,7 @@ all: koak
 koak:
 	stack build
 	echo '#!/usr/bin/bash' >  koak
-	echo 'stack exec koak-exe $$1' >> koak
+	echo 'stack exec koak-exe $$1 > out.ll' >> koak
 	echo 'clang out.ll' >> koak
 	echo './a.out' >> koak
 	echo 'rm -f out.ll' >> koak
