@@ -35,7 +35,7 @@ main = do
   --putStrLn (show tree)
   --displayTree "" tree
   let typedTree = inferTypes tree
-  displayTypedTree "" typedTree
+  --displayTypedTree "" typedTree
   let llvmIr = generateLlvmIr typedTree
-  putStrLn llvmIr
+  --putStrLn llvmIr
   writeFile "out.ll" llvmIr
