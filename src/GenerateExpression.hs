@@ -150,7 +150,7 @@ generateComparison expr tmp =
       (codeConvert1,newTmp3,handleConvert1) = convertType wantedType newTmp2 handle1;
       (codeConvert2,newTmp4,handleConvert2) = convertType wantedType newTmp3 handle2;
       handle1and2 = combineHandles handleConvert1 handleConvert2;
-      (Just opCode) = lookup op (if (wantedType == "int")
+      (Just opCode) = lookup op (if (wantedType == "i32")
                                  then comparisonInt
                                  else comparisonDouble);
       boolId = "%" ++ (show newTmp4);
